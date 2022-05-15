@@ -8,7 +8,51 @@ header h3{
 }
 div {
     text-align:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 p{
     font-size: 25px;
+}
+
+button {
+    border-radius: 6px;
+    font-size: 25px;
+    background-color: purple;
+    color: white;
+    border-width: 0;
+    margin: 10px;
+    width: 300px;
+}
+
+.questDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.questDiv button{
+    margin: 5px;
+    width: 300px;
+}
+ol {
+    position: relative;
+    background-color: lightskyblue;
+    list-style-position: inside;
+}
+
+li{
+    font-size: 20px;
+}
+.list-score button{
+    display: inline;
+}
+
+footer{
+    padding: 100px
+    color: gray;
+    font-size: 35px;
+    border-top: 5px solid gray;
+    border
+    padding: 20px;
 }

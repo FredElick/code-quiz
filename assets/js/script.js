@@ -4,8 +4,10 @@ var headerEl=document.querySelector("header");
 var divEl=document.querySelector("div");
 var timerEl=document.querySelector(".timer")
 var bodyEl=document.querySelector("body");
+var viewScoreEl=document.querySelector(".view-score")
 //make elements for quiz pages
 var newDiv=document.createElement("div");
+newDiv.className="questDiv";
 var question=document.createElement("h3");
 var ansrA=document.createElement("button");
 ansrA.setAttribute("answer", "a");
@@ -26,6 +28,7 @@ var scoreButtonEl=document.createElement("button");
 scoreButtonEl.id=("submit");
 // list scores elements
 var listScoreEl= document.createElement("div");
+listScoreEl.className='list-score';
 var highScoreEl=document.createElement("h1");
 highScoreEl.textContent="High Scores";
 var listEl=document.createElement("ol");
@@ -35,6 +38,7 @@ var clearEl=document.createElement("button");
 clearEl.textContent="Clear high scores";
 goBackEl.className="go-back";
 clearEl.className="clear";
+var answerMessage=document.createElement("footer");
 //global variables- correct answer marker and question list
 var correct="";
 var time=0;
@@ -176,7 +180,6 @@ function nextQuestion(index){
 
 scoreButtonEl.addEventListener("click",function(event){
     event.preventDefault();
-    debugger;
     var score ={
         score: time,
         name: formEl.value.trim()
@@ -255,12 +258,17 @@ newDiv.addEventListener("click", function(event){
     console.log(event.target.getAttribute("answer"));
     console.log(correct);
     if(event.target.getAttribute("answer")!=correct){
+        answerMessage.textContent='Incorrect';
        time=time-10;
        if(time<0){
            time=0;
        }
        timerEl.textContent="Time: "+time;
     }
+    else{
+        answerMessage.textContent='Correct';
+    }
+    newDiv.appendChild(answerMessage);
     if(questionNumber<qList.length-1){
         questionNumber++;
     nextQuestion(questionNumber)
@@ -283,6 +291,7 @@ var startQuiz= function(){
     questionNumber=0;
     nextQuestion(0);
     countdown();
+    answerMessage.remove();
 
 };
 
@@ -291,4 +300,10 @@ buttonEl.addEventListener("click", function(){
 startQuiz();
 
 } );
+viewScoreEl.onclick=function(){
+    headerEl.remove();
+    divEl.remove();
+    newDiv.remove();
+    listScores();
+}
 
