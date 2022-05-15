@@ -1,5 +1,6 @@
 ///tag existing elements
 var buttonEl=document.querySelector(".start");
+var headerEl=document.querySelector("header");
 var divEl=document.querySelector("div");
 var timerEl=document.querySelector(".timer")
 var bodyEl=document.querySelector("body");
@@ -14,7 +15,7 @@ var ansrC=document.createElement("button");
 ansrC.setAttribute("answer", "c");
 var ansrD=document.createElement("button");
 ansrD.setAttribute("answer", "d")
-//score screen elements
+// enter score elements
 var scoreDivEl=document.createElement("div");
 var allDoneEl=document.createElement("h1");
 var finalScoreEl=document.createElement("p");
@@ -22,6 +23,18 @@ var initialBlockEl=document.createElement("div");
 var initialText=document.createElement("p")
 var formEl=document.createElement("input");
 var scoreButtonEl=document.createElement("button");
+scoreButtonEl.id=("submit");
+// list scores elements
+var listScoreEl= document.createElement("div");
+var highScoreEl=document.createElement("h1");
+highScoreEl.textContent="High Scores";
+var listEl=document.createElement("ol");
+var goBackEl=document.createElement("button");
+goBackEl.textContent="Go back"
+var clearEl=document.createElement("button");
+clearEl.textContent="Clear high scores";
+goBackEl.className="go-back";
+clearEl.className="clear";
 //global variables- correct answer marker and question list
 var correct="";
 var time=0;
@@ -110,6 +123,14 @@ var qList= [
     },
 
 ];
+//check for scoreList
+if(localStorage.getItem('scoreList')){
+    scoreList=JSON.parse(localStorage.getItem('scoreList'));
+}
+
+else{
+    scoreList=[];
+}
 
 function countdown(){
     timerEl.textContent="Time: "+time;
@@ -153,18 +174,25 @@ function nextQuestion(index){
     setQuestion(qList,index);
 }
 
+scoreButtonEl.addEventListener("click",function(event){
+    event.preventDefault();
+    debugger;
+    var score ={
+        score: time,
+        name: formEl.value.trim()
+    }
+    scoreList.push(score);
+    var stringScore=JSON.stringify(scoreList);
+    localStorage.setItem("scoreList",stringScore);
+    listScores();
+})
+
 function scoreScreen(){
-    /**var scoreDivEl=document.createElement("div");
-    var allDoneEl=document.createElement("h1");
-    var finalScoreEl=document.createElement("p");
-    var initialBlockEl=document.createElement("div");
-    var initialText=document.createElement("p")
-    var formEl=document.createElement("input");
-    var scoreButtonEl=document.createElement("button"); */
     allDoneEl.textContent="All done!";
     finalScoreEl.textContent="Your final Score is "+time+".";
     initialText.textContent="Enter initials: ";
     scoreButtonEl.textContent="Submit";
+    
     newDiv.remove();
     bodyEl.appendChild(scoreDivEl);
     scoreDivEl.appendChild(allDoneEl);
@@ -176,6 +204,78 @@ function scoreScreen(){
 
 }
 
+listScoreEl.addEventListener("click",function(event){
+    if(event.target.className=='clear'){
+
+        scoreList=[];
+        var stringScore=JSON.stringify(scoreList);
+        localStorage.setItem("scoreList",stringScore);
+        while(listEl.firstChild){
+            listEl.removeChild(listEl.firstChild);
+        }
+    }
+    if(event.target.className=='go-back'){
+        while(listEl.firstChild){
+            listEl.removeChild(listEl.firstChild);
+        }
+        listScoreEl.remove();
+        bodyEl.appendChild(headerEl);
+        bodyEl.appendChild(divEl);
+       
+    }
+})
+
+function listScores(){
+scoreDivEl.remove();
+headerEl.remove();
+bodyEl.appendChild(listScoreEl);
+listScoreEl.appendChild(highScoreEl);
+listScoreEl.appendChild(listEl);
+listScoreEl.appendChild(goBackEl);
+listScoreEl.appendChild(clearEl);
+stringScore=localStorage.getItem("scoreList")
+scoreList=JSON.parse(stringScore);
+
+for(var j=0; j<scoreList.length;j++){
+var temp=document.createElement("li");
+console.log(j);
+var initials=scoreList[j];
+console.log(initials);
+
+temp.textContent=scoreList[j].name+" - "+scoreList[j].score;
+listEl.appendChild(temp);
+}
+
+
+
+
+}
+
+newDiv.addEventListener("click", function(event){
+    console.log(event.target.getAttribute("answer"));
+    console.log(correct);
+    if(event.target.getAttribute("answer")!=correct){
+       time=time-10;
+       if(time<0){
+           time=0;
+       }
+       timerEl.textContent="Time: "+time;
+    }
+    if(questionNumber<qList.length-1){
+        questionNumber++;
+    nextQuestion(questionNumber)
+
+    }
+    else{
+        console.log('thats all folks')
+        stopTime();
+        console.log(timerEl.textContent);
+        console.log(time);
+        newDiv.remove();
+        scoreScreen();
+    }
+})
+
 var startQuiz= function(){
     time=75;
     divEl.remove();
@@ -183,29 +283,12 @@ var startQuiz= function(){
     questionNumber=0;
     nextQuestion(0);
     countdown();
-    newDiv.addEventListener("click", function(event){
-        console.log(event.target.getAttribute("answer"));
-        console.log(correct);
-        if(event.target.getAttribute("answer")!=correct){
-           time=time-10;
-           timerEl.textContent="Time: "+time;
-        }
-        if(questionNumber<qList.length-1){
-            questionNumber++;
-        nextQuestion(questionNumber)
 
-        }
-        else{
-            console.log('thats all folks')
-            stopTime();
-            console.log(timerEl.textContent);
-            console.log(time);
-            newDiv.remove();
-            scoreScreen();
-        }
-    })
 };
+
 
 buttonEl.addEventListener("click", function(){
 startQuiz();
+
 } );
+
