@@ -241,9 +241,7 @@ scoreList=JSON.parse(stringScore);
 
 for(var j=0; j<scoreList.length;j++){
 var temp=document.createElement("li");
-console.log(j);
 var initials=scoreList[j];
-console.log(initials);
 
 temp.textContent=scoreList[j].name+" - "+scoreList[j].score;
 listEl.appendChild(temp);
@@ -255,8 +253,6 @@ listEl.appendChild(temp);
 }
 
 newDiv.addEventListener("click", function(event){
-    console.log(event.target.getAttribute("answer"));
-    console.log(correct);
     if(event.target.getAttribute("answer")!=correct){
         answerMessage.textContent='Incorrect';
        time=time-10;
@@ -275,10 +271,7 @@ newDiv.addEventListener("click", function(event){
 
     }
     else{
-        console.log('thats all folks')
         stopTime();
-        console.log(timerEl.textContent);
-        console.log(time);
         newDiv.remove();
         scoreScreen();
     }
