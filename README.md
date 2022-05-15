@@ -1,0 +1,7 @@
+# code-quiz
+hoo buddy. I feel like I might have approached this incorrectly, but to get to brass tacks everything is pretty much using the DOM web API stuff to rip out elements and replace them with the next set. Questions are dynamically updated by looping through the question array. The top left text will take you to highscore. If I had more time, I'd make it react to mouseover. 
+
+Everything is functional though. Click the begin quiz button and it will take you throguh 10 questions with a timer of 75 seconds. Click the response buttons to answer. 
+A message will display indicating if your answer was correct or incorrect. Incorrect answers result in a reduction of 10 seconds from your timer. Once time runs out or you get through all the questions, you will be prompted to enter your initials. I didn't add any validation, so you can enter whatever you want. If I were to I'd just use a while loop to check if the string was 2-3 characters long and refuse to submit until the condition was met.
+
+Once you hit submit you will be taken to the high-score screen which will show your previous scores. You can choose to erase them or go back to the starting screen. If you don't erase, these scores will persist even when the browser is closed.

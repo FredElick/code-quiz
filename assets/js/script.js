@@ -39,7 +39,7 @@ clearEl.textContent="Clear high scores";
 goBackEl.className="go-back";
 clearEl.className="clear";
 var answerMessage=document.createElement("footer");
-//global variables- correct answer marker and question list
+//global variables- correct answer marker, time and question list
 var correct="";
 var time=0;
 var qList= [
@@ -127,7 +127,7 @@ var qList= [
     },
 
 ];
-//check for scoreList
+//check for scoreList and import, if none make one
 if(localStorage.getItem('scoreList')){
     scoreList=JSON.parse(localStorage.getItem('scoreList'));
 }
@@ -135,7 +135,7 @@ if(localStorage.getItem('scoreList')){
 else{
     scoreList=[];
 }
-
+//define the countdown function
 function countdown(){
     timerEl.textContent="Time: "+time;
 timeInterval= setInterval(function(){
@@ -151,7 +151,7 @@ else{
 }, 1000)
 }
 
-
+//sets the element text of buttons and questions
 var setQuestion= function( arr, index){
     var questObj=arr[index];
     question.textContent=questObj.question;
@@ -161,6 +161,7 @@ var setQuestion= function( arr, index){
     ansrD.textContent=questObj.d;
     correct=questObj.correct;
 }
+//adds the elements to the page for the quiz portion
 function addQuestion(){
     bodyEl.appendChild(newDiv);
     newDiv.appendChild(question);
@@ -169,15 +170,15 @@ function addQuestion(){
     newDiv.appendChild(ansrC);
     newDiv.appendChild(ansrD);
 }
-
+//stops the timer
 function stopTime(){
     clearInterval(timeInterval);
 }
-
+//sets the new questions when needed, in retrospect superfluous, but makes it so you don't need to plug the question array every time.
 function nextQuestion(index){
     setQuestion(qList,index);
 }
-
+//event listener for score submission button. Updates the score array and saves it to storage, also takes us to the score list
 scoreButtonEl.addEventListener("click",function(event){
     event.preventDefault();
     var score ={
@@ -189,7 +190,7 @@ scoreButtonEl.addEventListener("click",function(event){
     localStorage.setItem("scoreList",stringScore);
     listScores();
 })
-
+//function defines the score entry screen, and removes the quiz elements
 function scoreScreen(){
     allDoneEl.textContent="All done!";
     finalScoreEl.textContent="Your final Score is "+time+".";
@@ -207,6 +208,7 @@ function scoreScreen(){
 
 }
 
+//event listener for the score list screen, lets you clear scores or return to the main menu.
 listScoreEl.addEventListener("click",function(event){
     if(event.target.className=='clear'){
 
@@ -227,7 +229,8 @@ listScoreEl.addEventListener("click",function(event){
        
     }
 })
-
+//defines the score list screen. Loops through the array of scores and displays them. No sorting of high scores,
+//although that wasn't asked for in project description.
 function listScores(){
 scoreDivEl.remove();
 headerEl.remove();
@@ -246,12 +249,9 @@ var initials=scoreList[j];
 temp.textContent=scoreList[j].name+" - "+scoreList[j].score;
 listEl.appendChild(temp);
 }
-
-
-
-
 }
-
+//event listener for questions. will match the button attribute to the correct answer to check for accuracy. Reduces timer if wrong and updates to next question until
+//array is empty or time=0, then stops time and kicks to score screen
 newDiv.addEventListener("click", function(event){
     if(event.target.getAttribute("answer")!=correct){
         answerMessage.textContent='Incorrect';
@@ -276,7 +276,8 @@ newDiv.addEventListener("click", function(event){
         scoreScreen();
     }
 })
-
+//function for starting the quiz. removes old ui elements, initializes timer, and puts first question on screen. Added something to remove the correct/incorrect
+//message as it was sticking around if you jumped between score list after answering questions.
 var startQuiz= function(){
     time=75;
     divEl.remove();
@@ -287,12 +288,13 @@ var startQuiz= function(){
     answerMessage.remove();
 
 };
-
+//event listener for start button. ezpz
 
 buttonEl.addEventListener("click", function(){
 startQuiz();
 
 } );
+//view score button along top. I set it as an onclick function so I didn't have to muck about with making it a button or link to a new html page.
 viewScoreEl.onclick=function(){
     headerEl.remove();
     divEl.remove();
