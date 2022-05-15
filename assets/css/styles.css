@@ -1,0 +1,14 @@
+header {
+display: flex;
+justify-content: space-between;
+padding: 15px;
+}
+header h3{
+    font-size: 30px;
+}
+div {
+    text-align:center;
+}
+p{
+    font-size: 25px;
+}
